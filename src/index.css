@@ -1,68 +1,47 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@import "tailwindcss";
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
+@layer theme {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    --color-mizu-blue: rgb(174, 174, 211);
+    --font-family-title: Montserrat, sans-serif;
+    --font-family-body: Open Sans, sans-serif;
   }
-  a:hover {
-    color: #747bff;
+
+  .bg-mizu-blue {
+    background-color: var(--color-mizu-blue);
   }
-  button {
-    background-color: #f9f9f9;
+
+  .font-title {
+    font-family: var(--font-family-title);
+  }
+
+  .font-body {
+    font-family: var(--font-family-body);
+  }
+
+  .cloud-header {
+    background-color: rgba(174, 174, 211, 0.5); 
+    background-image:
+      url('src/assets/new-cloud.png'),
+      url('src/assets/new-cloud.png');
+    background-repeat: repeat-x, repeat-x;
+    background-blend-mode: soft-light;
+    background-position: top -50px left 0px, top -60px left 150px;
+    background-size: 350px; /* Adjust sizes */
+    min-height: 120px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    box-shadow: 0px 0px 5px 3px rgba(174, 174, 211, 0.5);
+    vertical-align: text-bottom;
+  }
+  
+  .custom-footer {
+    background-color: rgb(107, 114, 128,1); /* Equivalent to bg-gray-500 (using Tailwind's gray scale) */
+    color: #F9FAFB; /* Equivalent to text-gray-50 */
+    padding: 1rem; /* Equivalent to p-4 (1rem = 16px by default in Tailwind) */
+    margin-top: 2rem; /* Equivalent to mt-8 (8 * 0.25rem = 2rem) */
+    /* margin-bottom: 4rem; */
+    text-align: center; /* Equivalent to text-center */
+    box-shadow: 0 0 5px 5px rgba(107, 114, 128, 1); /* Box shadow above */
   }
 }
