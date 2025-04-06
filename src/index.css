@@ -1,14 +1,43 @@
 @import "tailwindcss";
+/* @custom-variant dark (&:where(.dark, .dark *)); */
 
 @layer theme {
   :root {
-    --color-mizu-blue: rgb(174, 174, 211);
+    --color-mizu-light: rgb(174, 174, 211);
+    --color-mizu-dark: rgb(130, 130, 184);
+    --layout-bg-color: var(--color-mizu-light);
     --font-family-title: Montserrat, sans-serif;
     --font-family-body: Open Sans, sans-serif;
+
+    /* the boxes that encase elements */
+    --color-element-light: var(--color-gray-300);
+    --color-element-dark: var(--color-gray-700);
+
+    /* content inside those boxes*/
+    --color-content-light: var(--color-gray-700); /* light mode not the lighter color */
+    --color-content-dark: var(--color-gray-50);
+  }
+  .dark {
+    --color-mizu-light: rgb(130, 130, 184);
+    --color-content-light: var(--color-content-dark);
+    --layout-bg-color: var(--color-mizu-dark);
   }
 
-  .bg-mizu-blue {
-    background-color: var(--color-mizu-blue);
+  .mizu-bg {
+    background-image: url(/src/assets/mizu-left.png);
+    background-repeat: no-repeat;
+    background-size:cover;
+    background-position: center;
+  }
+
+  .bg-mizu-light {
+    background-color: var(--color-mizu-light);
+    .dark & {
+      background-color: var(--color-mizu-dark);
+    }
+  }
+  .bg-mizu-dark {
+    background-color: var(--color-mizu-dark);
   }
 
   .font-title {
@@ -20,28 +49,61 @@
   }
 
   .cloud-header {
-    background-color: rgba(174, 174, 211, 0.5); 
     background-image:
       url('src/assets/new-cloud.png'),
       url('src/assets/new-cloud.png');
     background-repeat: repeat-x, repeat-x;
     background-blend-mode: soft-light;
+    opacity: 50%;
     background-position: top -50px left 0px, top -60px left 150px;
     background-size: 350px; /* Adjust sizes */
-    min-height: 120px;
+    min-height: 108px;
     padding-top: 50px;
     padding-bottom: 50px;
-    box-shadow: 0px 0px 5px 3px rgba(174, 174, 211, 0.5);
     vertical-align: text-bottom;
+
+    .dark & {
+      background-blend-mode: color-burn;
+    }
   }
   
   .custom-footer {
-    background-color: rgb(107, 114, 128,1); /* Equivalent to bg-gray-500 (using Tailwind's gray scale) */
-    color: #F9FAFB; /* Equivalent to text-gray-50 */
+    background-color: var(--color-element-light); /* Equivalent to bg-gray-500 (using Tailwind's gray scale) */
+    color: var(--color-element-dark); /* Equivalent to text-gray-50 */
     padding: 1rem; /* Equivalent to p-4 (1rem = 16px by default in Tailwind) */
     margin-top: 2rem; /* Equivalent to mt-8 (8 * 0.25rem = 2rem) */
     /* margin-bottom: 4rem; */
     text-align: center; /* Equivalent to text-center */
-    box-shadow: 0 0 5px 5px rgba(107, 114, 128, 1); /* Box shadow above */
+    box-shadow: 0 0 5px 5px var(--color-element-light); /* Box shadow above */
+    text-decoration-color: var(--color-element-dark);
+    .dark & {
+      background-color: var(--color-element-dark); /* Equivalent to bg-gray-500 (using Tailwind's gray scale) */
+      color: var(--color-element-light); /* Equivalent to text-gray-50 */
+      box-shadow: 0 0 5px 5px var(--color-element-dark); /* Box shadow above */
+      text-decoration-color: var(--color-element-light);
+    }
+  }
+
+  
+}
+
+@layer components {
+  .content-section { 
+    @apply shadow-lg;
+    
+    margin-block: calc(var(--spacing) * 10) /* 2rem = 32px */;
+
+    margin:auto; 
+    margin-bottom: calc(var(--spacing) * 10);
+    max-width: 70%;
+    padding: calc(var(--spacing) * 6) /* 1.5rem = 24px */;
+    background-color: var(--color-element-light);
+    opacity: 90%;
+    border-radius: var(--radius-lg) /* 0.5rem = 8px */;
+    align-items: center;
+    .dark & {
+      background-color: var(--color-element-dark);
+    }
+    
   }
 }

@@ -1,0 +1,64 @@
+@import "tailwindcss";
+/* @custom-variant dark (&:where(.dark, .dark *)); */
+
+@layer theme {
+  :root {
+    --color-mizu-light: rgb(174, 174, 211);
+    --color-mizu-dark: rgb(130, 130, 184);
+    --layout-bg-color: var(--color-mizu-light);
+    --font-family-title: Montserrat, sans-serif;
+    --font-family-body: Open Sans, sans-serif;
+  }
+  .dark {
+    --color-mizu-light: rgb(130, 130, 184);
+    --layout-bg-color: var(--color-mizu-dark);
+  }
+
+  .bg-mizu-light {
+    background-color: var(--color-mizu-light);
+    .dark & {
+      background-color: var(--color-mizu-dark);
+    }
+  }
+  .bg-mizu-dark {
+    background-color: var(--color-mizu-dark);
+  }
+
+  .font-title {
+    font-family: var(--font-family-title);
+  }
+
+  .font-body {
+    font-family: var(--font-family-body);
+  }
+
+  .cloud-header {
+    background-color: var(--color-mizu-light); 
+    background-image:
+      url('src/assets/new-cloud.png'),
+      url('src/assets/new-cloud.png');
+    background-repeat: repeat-x, repeat-x;
+    background-blend-mode: soft-light;
+    background-position: top -50px left 0px, top -60px left 150px;
+    background-size: 350px; /* Adjust sizes */
+    min-height: 120px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    box-shadow: 0px 0px 5px 3px rgba(174, 174, 211, 0.5);
+    vertical-align: text-bottom;
+
+    .dark & {
+      background-color: var(--color-mizu-dark);
+    }
+  }
+  
+  .custom-footer {
+    background-color: rgb(107, 114, 128,1); /* Equivalent to bg-gray-500 (using Tailwind's gray scale) */
+    color: #F9FAFB; /* Equivalent to text-gray-50 */
+    padding: 1rem; /* Equivalent to p-4 (1rem = 16px by default in Tailwind) */
+    margin-top: 2rem; /* Equivalent to mt-8 (8 * 0.25rem = 2rem) */
+    /* margin-bottom: 4rem; */
+    text-align: center; /* Equivalent to text-center */
+    box-shadow: 0 0 5px 5px rgba(107, 114, 128, 1); /* Box shadow above */
+  }
+}

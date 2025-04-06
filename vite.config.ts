@@ -1,8 +1,12 @@
+// vite.config.ts
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
-import tailwindcss from '@tailwindcss/vite'
+import tailwindcss from '@tailwindcss/vite' // Make sure import name is correct
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()], 
+  plugins: [
+    react(),
+    // Pass config path explicitly
+    tailwindcss()
+  ],
 })
