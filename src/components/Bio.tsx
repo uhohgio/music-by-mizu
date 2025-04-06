@@ -10,7 +10,7 @@ const Bio: React.FC = () => {
       <p className="text-[var(--color-content-light)] leading-relaxed">
         {/* Add the actual bio text here. You can hardcode it for now,
             or we could pass it as a prop later if needed. */}
-        A rising pop artist from San Diego, CA. "insert cool quote here"
+        A rising pop artist from San Diego, CA. "You'll have bad times, but it'll always wake you up to the good stuff you weren't paying attention to." - Sean, Good Will Hunting 1997 
       </p>
       {/* You could add an image here too if desired */}
       {/* <img src="/path/to/artist-image.jpg" alt="Artist Name" className="mt-4 rounded" /> */}

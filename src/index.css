@@ -20,6 +20,7 @@
   .dark {
     --color-mizu-light: rgb(130, 130, 184);
     --color-content-light: var(--color-content-dark);
+    --color-element-light: var(var(--color-element-dark));
     --layout-bg-color: var(--color-mizu-dark);
   }
 
@@ -95,7 +96,7 @@
 
     margin:auto; 
     margin-bottom: calc(var(--spacing) * 10);
-    max-width: 70%;
+    max-width: 90%;
     padding: calc(var(--spacing) * 6) /* 1.5rem = 24px */;
     background-color: var(--color-element-light);
     opacity: 90%;

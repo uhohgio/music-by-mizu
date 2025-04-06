@@ -4,5 +4,5 @@ export interface Track {
     title: string;
     artist?: string; // Optional if all tracks are by the same artist
     audioSrc: string; // Path or URL to the audio file
-    // Add other optional fields if needed: duration, albumArtSrc, etc.
+    albumArtSrc?: string; // optional field
   }
