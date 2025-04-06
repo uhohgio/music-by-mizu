@@ -1,0 +1,39 @@
+
+[
+    {
+      "id": "covers",
+      "title": "covers",
+      "year": 2025,
+      "albumArtSrc": "/images/mizu-trees.jpg",
+      "tracks": [
+        { "id": 1, "title": "snow", "audioSrc": "/audio/freshstaticsnowshelterlive.mp3" },
+        { "id": 2, "title": "instagram", "audioSrc": "/audio/instagram (guitar cover).wav" },
+        { "id": 3, "title": "fireflies", "audioSrc": "/audio/fireflies.mp3" },
+        { "id": 4, "title": "sad machine", "audioSrc": "/audio/SAD MACHINE PORTER SAMPLE.mp3" }
+
+      ]
+    },
+    {
+      "id": "vibes",
+      "title": "vibes",
+      "year": 2025,
+      "albumArtSrc": "/images/mizu-carnival.jpg",
+      "tracks": [
+        { "id": 5, "title": "neko", "audioSrc": "/audio/neko!.wav" },
+        { "id": 6, "title": "vibes", "audioSrc": "/audio/vibes_demo_1.wav"},
+        { "id": 7, "title": "nostalgia", "audioSrc": "/audio/NOSTALGIA 2.mp3" },
+        { "id": 8, "title": "mizu", "audioSrc": "/audio/mizu! (demo 5).wav"},
+        { "id": 9, "title": "nathan", "audioSrc": "/audio/NATHAN GAME MAIN 1.mp3"}
+      ]
+    },
+    {
+        "id": "bouncin-ep",
+        "title": "bouncin",
+        "year": 2025,
+        "albumArtSrc": "/images/mizu-lobster.jpg",
+        "tracks": [
+          { "id": 10, "title": "bouncin", "audioSrc": "/audio/BOUNCIN 2.mp3" },
+          { "id": 11, "title": "bouncin-guitar ISO", "audioSrc": "/audio/BOUNCIN Guitar ISO copy.mp3"}
+        ]
+      }
+  ]

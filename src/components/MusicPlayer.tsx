@@ -154,11 +154,11 @@ useEffect(() => {
       // handles autoplay
       if (playPromise !== undefined) {
         playPromise
-          .then(_ => {
-            // Autoplay started! The 'onPlay' event listener we added earlier
-            // should automatically set the isPlaying state to true.
-            console.log(`Autoplay successful for: ${trackSrc}`);
-          })
+        //   .then(_ => {
+        //     // Autoplay started! The 'onPlay' event listener we added earlier
+        //     // should automatically set the isPlaying state to true.
+        //     console.log(`Autoplay successful for: ${trackSrc}`);
+        //   })
           .catch(error => {
             // Autoplay was prevented by the browser.
             console.error(`Autoplay prevented for ${trackSrc}:`, error);
