@@ -1,6 +1,7 @@
 // src/components/MusicPlayer.tsx
-import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute, FaVolumeDown, FaVolumeOff, FaStepBackward, FaStepForward, FaMusic } from 'react-icons/fa'
+import React, { useRef, useEffect, useState} from 'react';
+import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute, FaVolumeDown, FaVolumeOff, FaStepBackward, FaStepForward, FaMusic, FaRedo, FaRandom } from 'react-icons/fa'
+import { TbRepeatOnce } from 'react-icons/tb'; // Example for 'repeat one' icon
 
 interface MusicPlayerProps {
   trackSrc: string | null; // URL of the track to play, or null if none selected
@@ -10,6 +11,11 @@ interface MusicPlayerProps {
   onPlayPrevious: () => void; // Handler for previous button
   hasNext: boolean; // Flag to enable/disable next button
   hasPrevious: boolean; // Flag to enable/disable previous button
+  repeatMode: 'none' | 'one' | 'all';
+  onToggleRepeat: () => void;
+  onTrackEnd: () => void; // Callback for when track finishes
+  isShuffled: boolean;
+  onToggleShuffle: () => void;
 }
 
 
@@ -33,6 +39,11 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
     onPlayPrevious,
     hasNext,
     hasPrevious, 
+    repeatMode,
+    onToggleRepeat,
+    onTrackEnd,
+    isShuffled,
+    onToggleShuffle,
 }) => {
     const audioRef = useRef<HTMLAudioElement>(null); // Ref to access the audio element
 
@@ -49,29 +60,32 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
    // --- Event Handlers for Audio Element ---
 
     // Update duration when metadata loads
-    const handleLoadedMetadata = useCallback(() => {
+    const handleLoadedMetadata = () => {
         if (audioRef.current) {
         setDuration(audioRef.current.duration);
         setIsMetadataLoaded(true); // Mark metadata as loaded
         }
-    }, []); // No dependencies, function identity is stable
+    }; // No dependencies, function identity is stable
 
 
     // Update current time as the track plays
-    const handleTimeUpdate = useCallback(() => {
+    const handleTimeUpdate = () => {
         if (audioRef.current) {
         setCurrentTime(audioRef.current.currentTime);
         }
-    }, []); // No dependencies
+    } // No dependencies
 
     // Reset state when track ends
-    const handleTrackEnd = useCallback(() => {
+    const handleTrackEnd = () => {
         setIsPlaying(false);
         // Optional: set currentTime back to 0? Or implement play next?
+        if (repeatMode !== 'one') {
+            onTrackEnd();
+         }
         if (audioRef.current) {
           audioRef.current.currentTime = 0;
         }
-    }, []); // No dependencies
+    }; 
 
     
 
@@ -196,15 +210,21 @@ useEffect(() => {
         audio.removeEventListener('volumechange', () => handleVolumeChange);
       };
     }
-  }, [trackSrc, handleLoadedMetadata, handleTimeUpdate, handleTrackEnd]);// Add handlers as dependencies
+  }, [trackSrc]);// Add handlers as dependencies
 
-
+  useEffect(() => {
+    if (audioRef.current) {
+      // Set the loop attribute based on the repeatMode prop
+      audioRef.current.loop = (repeatMode === 'one');
+      console.log(`Loop property set to: ${audioRef.current.loop} (repeatMode: ${repeatMode})`);
+    }
+  }, [repeatMode]); // This effect ONLY runs when repeatMode changes
   
   if (!trackSrc) {
     return <div className="mt-4 p-4 text-center text-[var(--color-content-light)] ">Select a track to play</div>;
   }
   return (
-    <div className="mt-4 p-4 rounded flex flex-col md:flex-row items-center gap-3 md:gap-4">
+    <div className="mt-4 p-4 rounded flex flex-wrap flex-col md:flex-row items-center gap-3 md:gap-4">
       {/* Audio element - hidden but necessary */}
       <audio ref={audioRef} preload="metadata"> {/* Preload metadata to get duration sooner */}
         Your browser does not support the audio element. ˙◠˙
@@ -223,6 +243,19 @@ useEffect(() => {
           <FaMusic className="text-2xl text-gray-500 dark:text-neutral-400" />
         )}
       </div>
+
+      {/* --- Add Repeat Button --- */}
+      <button
+               onClick={onToggleRepeat}
+               className={`p-2 text-lg rounded-full hover:bg-gray-200 dark:hover:bg-neutral-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors
+                 ${repeatMode !== 'none' ? 'text-mizu-dark dark:text-mizu-light' : 'text-neutral-500 dark:text-neutral-400'}
+               `}
+               aria-label={`Repeat mode: ${repeatMode}`}
+               title={`Repeat mode: ${repeatMode}`}
+               disabled={!isMetadataLoaded}
+             >
+               {repeatMode === 'one' ? <TbRepeatOnce /> : <FaRedo />}
+             </button>
 
     {/* Main Controls Group (Prev, Play/Pause, Next) */}  
     <div className="flex items-center gap-3">
@@ -300,6 +333,18 @@ useEffect(() => {
             aria-label="Volume"
           />
     </div>
+    {/* --- Add Shuffle Button Placeholder (Add later) --- */}
+    <button
+               onClick={onToggleShuffle}
+               className={`p-2 text-lg rounded-full hover:bg-gray-200 dark:hover:bg-neutral-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors
+                 ${isShuffled ? 'text-mizu-dark dark:text-mizu-light' : 'text-neutral-500 dark:text-neutral-400'}
+               `}
+               aria-label={`Shuffle: ${isShuffled ? 'On' : 'Off'}`}
+               title={`Shuffle: ${isShuffled ? 'On' : 'Off'}`}
+               disabled={!isMetadataLoaded} // Disable if player not ready
+              >
+                <FaRandom />
+              </button>
     </div>
   );
 };
