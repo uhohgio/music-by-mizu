@@ -2,6 +2,8 @@
 import React from 'react';
 import Header from './Header';
 import Footer from './Footer';
+// import MusicPlayer from './MusicPlayer'; // Import the player here
+// import { usePlayerStore } from '../store/playerStore'; // Import the store hook
 
 // Define props using an interface for type safety
 interface LayoutProps {
@@ -24,9 +26,9 @@ localStorage.removeItem("theme");
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     // Try this:
-<div className="flex flex-col min-h-screen bg-mizu-light mizu-bg font-sans">{/* Example Tailwind: Makes footer stick to bottom */}
+<div className="flex flex-col min-h-screen bg-mizu-light mizu-bg font-sans">
       <Header />
-      <main className="flex-grow container p-4 align-middle mx-10"> {/* Example Tailwind: Centers content, adds padding */}
+      <main className="flex-grow container p-4 align-middle mx-10"> 
         {children} {/* This is where page-specific content will render */}
       </main>
       <Footer />

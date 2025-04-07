@@ -8,7 +8,7 @@ const Contact: React.FC = () => {
   const email = 'mailto:erikts777@icloud.com'; // Use mailto: for email links
   const spotifyUrl = 'https://open.spotify.com/artist/1e7K8jD3wRuQfnwDAOeGqe?si=dqcw1rXoQhOIBYnSf_WYUA';
   const soundcloudUrl = 'https://soundcloud.com/madeon';
-  const instagramUrl = "https://www.instagram.com/shimizuerik?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==";
+  const instagramUrl = "https://www.instagram.com/musicbymizu/";
   // Add other links as needed (Bandcamp, YouTube, etc.)
 
   return (
@@ -23,10 +23,6 @@ const Contact: React.FC = () => {
           className="text-[--color-mizu-dark] hover:text-opacity-80 dark:text-[--color-mizu-blue] dark:hover:text-opacity-80 transition-colors duration-200" // Use themed colors
           aria-label="Email Mizu" // Accessibility
         >
-          {/* Option 1: Text */}
-          {/* Email */}
-          {/* Option 2: Icon (requires installing react-icons: npm install react-icons) */}
-          {/* <span className="text-3xl">✉︎</span> Placeholder Emoji Icon */}
           <FaEnvelope size={30} className="text-[var(--color-content-light)]" />
         </a>
 

@@ -41,7 +41,7 @@ const DirectoryView: React.FC<{ albums?: Album[] }> = () => { // Optional prop f
 
   if (isLoading) {
     // You can replace this with a nicer loading spinner component
-    return <div className="text-center p-10">Loading music library...</div>;
+    return <div className="text-center p-10 text-[var(--color-element-light)] tracking-widest">Loading music library...</div>;
   }
 
   if (error) {
@@ -49,7 +49,7 @@ const DirectoryView: React.FC<{ albums?: Album[] }> = () => { // Optional prop f
   }
 
   if (albums.length === 0) {
-      return <div className="text-center p-10">No albums found.</div>;
+      return <div className="text-center p-10 text-[var(--color-element-light)] tracking-widest">No albums found.</div>;
   }
 
   return (
@@ -66,16 +66,16 @@ const DirectoryView: React.FC<{ albums?: Album[] }> = () => { // Optional prop f
             className="block group content-section p-0 overflow-hidden transform hover:scale-105 transition-transform duration-200" // Reuse content-section, remove padding, add hover
           >
             {/* Album Art */}
-            <div className="aspect-square bg-gray-300 dark:bg-neutral-600 flex items-center justify-center">
+            <div className="aspect-square bg-[var(--color-content-light)] flex items-center justify-center">
               {album.albumArtSrc ? (
                 <img src={album.albumArtSrc} alt={`Cover for ${album.title}`} className="w-full h-full object-cover"/>
               ) : (
-                 <span className="text-9xl text-gray-500 dark:text-neutral-400">🎵</span> // Placeholder
+                 <span className="text-9xl text-[var(--color-element-light)]">🎵</span> // Placeholder
               )}
             </div>
             {/* Album Info */}
-            <div className="p-3 bg-white dark:bg-neutral-800">
-               <h3 className="font-semibold truncate font-title text-neutral-900 dark:text-neutral-100 group-hover:text-mizu-dark dark:group-hover:text-mizu-light" title={album.title}>
+            <div className="p-3 text-[var(--color-element-light)]">
+               <h3 className="font-semibold truncate font-title text-[var(--color-content-light)] group-hover:text-mizu-dark dark:group-hover:text-mizu-light" title={album.title}>
                   {album.title}
                 </h3>
                {album.year && <p className="text-sm text-neutral-600 dark:text-neutral-400">{album.year}</p>}

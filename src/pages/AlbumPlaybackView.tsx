@@ -187,21 +187,21 @@ const playPreviousTrack = useCallback(() => {
   // --- Render Logic ---
 
   if (isLoading) {
-    return <div className="text-center p-10">Loading album...</div>;
+    return <div className="text-center p-10 text-[var(--color-element-light)] tracking-widest">Loading album...</div>;
   }
 
   if (error) {
     return (
         <div className="text-center p-10">
-            <p className="text-red-500 mb-4">{error}</p>
-            <Link to="/" className="text-mizu-dark dark:text-mizu-light hover:underline">Back to Directory</Link>
+            <p className="text-red-900 tracking-wide mb-4">{error} :(</p>
+            <Link to="/" className="text-[var(--color-content-light)] hover:underline">Back to Directory</Link>
         </div>
     );
   }
 
   if (!albumData) {
     // Should be caught by error state usually, but added as safeguard
-    return <div className="text-center p-10">Album data could not be loaded.</div>;
+    return <div className="text-center p-10 text-[var(--color-element-light)] tracking-widest">Album data could not be loaded.</div>;
   }
 
   // Data loaded successfully
@@ -232,7 +232,7 @@ const playPreviousTrack = useCallback(() => {
 
       {/* Track List and Player */}
       <div className="content-section"> {/* Wrap list and player */}
-        <h2 className="text-2xl font-bold mb-4 text-neutral-900 dark:text-neutral-100 font-title">Tracks</h2>
+        <h2 className="text-2xl font-bold mb-4 text-neutral-800 dark:text-neutral-100 font-title">Tracks</h2>
         <TrackList
           tracks={albumData.tracks}
           onSelectTrack={handleSelectTrack}

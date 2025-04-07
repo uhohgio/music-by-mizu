@@ -80,7 +80,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
         setIsPlaying(false);
         // Optional: set currentTime back to 0? Or implement play next?
         if (repeatMode !== 'one') {
-            onTrackEnd();
+            onTrackEnd(); //moves on once the track ends
          }
         if (audioRef.current) {
           audioRef.current.currentTime = 0;
@@ -150,9 +150,6 @@ useEffect(() => {
     setIsPlaying(false); // Stop playback when track changes
     setCurrentTime(0); // Reset time
     setDuration(0); // Reset duration
-    // These are also options but... nah:
-    // setVolume(1);
-    // setIsMuted(false);
 
     if (trackSrc && audioRef.current) {
       audioRef.current.src = trackSrc;
@@ -161,6 +158,8 @@ useEffect(() => {
       // Restore volume/mute state potentially stored
       audioRef.current.volume = volume;
       audioRef.current.muted = isMuted;
+
+        // Set the loop attribute based on the repeatMode prop
 
       // Attempt to play the track automatically
       const playPromise = audioRef.current.play();
@@ -216,7 +215,6 @@ useEffect(() => {
     if (audioRef.current) {
       // Set the loop attribute based on the repeatMode prop
       audioRef.current.loop = (repeatMode === 'one');
-      console.log(`Loop property set to: ${audioRef.current.loop} (repeatMode: ${repeatMode})`);
     }
   }, [repeatMode]); // This effect ONLY runs when repeatMode changes
   
