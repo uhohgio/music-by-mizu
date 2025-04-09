@@ -34,7 +34,7 @@ function App() {
 
       <Bio />
       <Contact />
-      <hr className='text-white font-bold mt-8 '/>
+      <hr className='text-white font-bold mt-8'/>
     </Layout>
     
     

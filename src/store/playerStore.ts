@@ -4,7 +4,20 @@ import { persist } from 'zustand/middleware'; // Import persist middleware
 import type { Track, Album } from '../types'; // Assuming types are here
 
 // Helper to shuffle indices (Fisher-Yates)
-function shuffleArray<T>(array: T[]): T[] { /* ... (keep shuffle function) ... */ }
+function shuffleArray<T>(array: T[]): T[] {
+    let currentIndex = array.length, randomIndex;
+    const newArray = [...array]; // Clone array
+    // While there remain elements to shuffle.
+    while (currentIndex !== 0) {
+        // Pick a remaining element.
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+        // And swap it with the current element.
+        [newArray[currentIndex], newArray[randomIndex]] = [
+        newArray[randomIndex], newArray[currentIndex]];
+    }
+    return newArray;
+}
 
 interface PlayerState {
   // Queue & Playback State
@@ -67,7 +80,7 @@ export const usePlayerStore = create<PlayerState>()(
           });
       },
       playTrack: (trackIndex) => {
-          const { queue, isShuffled, originalIndices } = get();
+          const { queue } = get();
           if (trackIndex >= 0 && trackIndex < queue.length) {
               // If shuffle is on, we still set the original index,
               // but playNext/Prev will use the shuffle order.
@@ -75,7 +88,7 @@ export const usePlayerStore = create<PlayerState>()(
           }
       },
        // Renamed to avoid conflict with state variable
-       togglePlaybackStatus: (audioIsPlaying: boolean) => {
+       togglePlayPause: () => {
            // This action might be called by the player based on play/pause button clicks
            // OR by the audio element's actual play/pause events.
            // We need a way for the component to trigger play/pause INTENT
@@ -88,8 +101,9 @@ export const usePlayerStore = create<PlayerState>()(
        },
        setIsPlaying: (playing) => set({ isPlaying: playing }), // Action called by audio events
 
+
       playNext: () => {
-          const { currentTrackIndex, isShuffled, shuffledIndices, queue, originalIndices, repeatMode } = get();
+          const { currentTrackIndex, isShuffled, shuffledIndices, queue, repeatMode } = get();
           if (queue.length === 0) return;
 
           let nextOriginalIndex: number | null = null;
@@ -132,7 +146,7 @@ export const usePlayerStore = create<PlayerState>()(
           }
       },
       playPrevious: () => {
-           const { currentTrackIndex, isShuffled, shuffledIndices, queue, originalIndices, repeatMode } = get();
+           const { currentTrackIndex, isShuffled, shuffledIndices, queue, repeatMode } = get();
            if (queue.length === 0) return;
 
            let prevOriginalIndex: number | null = null;
@@ -176,7 +190,7 @@ export const usePlayerStore = create<PlayerState>()(
       },
       setVolume: (newVolume) => set({ volume: newVolume, isMuted: newVolume === 0 }),
       toggleMute: () => {
-          const { isMuted, volume } = get();
+          const { isMuted} = get();
           const currentlyMuted = !isMuted;
           if(currentlyMuted) {
             // We need to store previous volume *before* muting, this logic is tricky in Zustand alone

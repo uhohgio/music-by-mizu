@@ -19,10 +19,10 @@
       "year": 2025,
       "albumArtSrc": "/images/mizu-carnival.jpg",
       "tracks": [
-        { "id": 5, "title": "neko", "audioSrc": "/audio/neko!.wav" },
-        { "id": 6, "title": "vibes", "audioSrc": "/audio/vibes_demo_1.wav"},
-        { "id": 7, "title": "nostalgia", "audioSrc": "/audio/NOSTALGIA 2.mp3" },
-        { "id": 8, "title": "mizu", "audioSrc": "/audio/mizu! (demo 5).wav"},
+        { "id": 5, "title": "nostalgia", "audioSrc": "/audio/NOSTALGIA 2.mp3" },
+        { "id": 6, "title": "mizu", "audioSrc": "/audio/mizu! (demo 5).wav"},
+        { "id": 7, "title": "vibes", "audioSrc": "/audio/vibes_demo_1.wav"},
+        { "id": 8, "title": "neko", "audioSrc": "/audio/neko!.wav" },
         { "id": 9, "title": "nathan", "audioSrc": "/audio/NATHAN GAME MAIN 1.mp3"}
       ]
     },
