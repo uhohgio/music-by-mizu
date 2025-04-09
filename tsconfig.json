@@ -3,5 +3,22 @@
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
-  ]
+  ],
+  "compilerOptions": {
+    // --- CHANGE THIS ---
+    "module": "ESNext", // Or "NodeNext", "ES2020", "ES2022"
+    // --- ENSURE THIS IS COMPATIBLE ---
+    "moduleResolution": "Node", // Or "NodeNext", "Node" (Bundler is often good with Vite)
+    // --- Other options ---
+    "target": "ES2020", // Ensure target is reasonably modern too
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    // ... potentially "jsx": "react-jsx", "isolatedModules": true etc. from Vite setup ...
+    // If you have a specific tsconfig for node/backend files (e.g., tsconfig.node.json),
+    // make sure the 'module' setting is correct there too!
+    "outDir": "dist" // Ensure output dir is set if not using Vite's build directly for API
+  },
 }

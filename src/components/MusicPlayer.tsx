@@ -3,6 +3,7 @@ import React, { useRef, useEffect, useState} from 'react';
 import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute, FaVolumeDown, FaVolumeOff, FaStepBackward, FaStepForward, FaMusic, FaRedo, FaRandom } from 'react-icons/fa'
 import { TbRepeatOnce } from 'react-icons/tb'; // Example for 'repeat one' icon
 
+
 interface MusicPlayerProps {
   trackSrc: string | null; // URL of the track to play, or null if none selected
   trackTitle: string; // Add title prop
