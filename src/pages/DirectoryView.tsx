@@ -53,12 +53,12 @@ const DirectoryView: React.FC<{ albums?: Album[] }> = () => { // Optional prop f
   }
 
   return (
-    <div className="p-4">
+    <div className="p-4 mr-auto ml-auto">
       <h1 className="text-3xl font-bold mb-6 text-center font-title text-neutral-800 dark:text-neutral-100 tracking-wider ">
       ˗ˏˋ directory ˎˊ˗
       </h1>
       {/* Grid layout for albums */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 mr-auto ml-auto">
         {albums.map((album) => (
           <Link
             key={album.id}

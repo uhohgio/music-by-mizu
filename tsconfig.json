@@ -16,9 +16,6 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    // ... potentially "jsx": "react-jsx", "isolatedModules": true etc. from Vite setup ...
-    // If you have a specific tsconfig for node/backend files (e.g., tsconfig.node.json),
-    // make sure the 'module' setting is correct there too!
     "outDir": "dist" // Ensure output dir is set if not using Vite's build directly for API
   },
 }

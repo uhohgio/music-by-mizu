@@ -1,6 +1,7 @@
 @import "tailwindcss";
 /* @custom-variant dark (&:where(.dark, .dark *)); */
 
+
 @layer theme {
   :root {
     --color-mizu-light: rgb(174, 174, 211);
@@ -90,11 +91,11 @@
 
 @layer components {
   .content-section { 
-    @apply shadow-lg;
-    
-    margin-block: calc(var(--spacing) * 10) /* 2rem = 32px */;
+    /* @apply shadow-lg; */
+    box-shadow: var(--shadow-lg);
 
-    margin:auto; 
+    margin-right:auto;
+    margin-left: auto;
     margin-bottom: calc(var(--spacing) * 10);
     max-width: 90%;
     padding: calc(var(--spacing) * 6) /* 1.5rem = 24px */;

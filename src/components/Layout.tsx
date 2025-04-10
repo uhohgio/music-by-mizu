@@ -26,9 +26,9 @@ localStorage.removeItem("theme");
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     // Try this:
-<div className="flex flex-col min-h-screen bg-mizu-light mizu-bg font-sans">
+<div className="flex flex-col min-h-screen bg-mizu-light mizu-bg font-sans mr-auto ml-auto">
       <Header />
-      <main className="flex-grow container p-4 align-middle mx-10"> 
+      <main className="flex-grow container p-4 align-middle mx-10 mr-auto ml-auto"> 
         {children} {/* This is where page-specific content will render */}
       </main>
       <Footer />
