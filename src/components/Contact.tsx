@@ -23,7 +23,7 @@ const Contact: React.FC = () => {
           className="text-[--color-mizu-dark] hover:text-opacity-80 dark:text-[--color-mizu-blue] dark:hover:text-opacity-80 transition-colors duration-200" // Use themed colors
           aria-label="Email Mizu" // Accessibility
         >
-          <FaEnvelope size={30} className="text-[var(--color-content-light)]" />
+          <FaEnvelope size={30} className="text-[var(--color-content-light)] dark:text-[var(--color-content-dark)]" />
         </a>
 
         {/* Spotify Link */}
@@ -35,7 +35,7 @@ const Contact: React.FC = () => {
           aria-label="Listen on Spotify"
         >
            {/* <span className="text-3xl">🎧</span> Placeholder */}
-           <FaSpotify size={30} className="text-[var(--color-content-light)]"/>
+           <FaSpotify size={30} className="text-[var(--color-content-light)] dark:text-[var(--color-content-dark)]"/>
         </a>
 
         {/* SoundCloud Link */}
@@ -47,7 +47,7 @@ const Contact: React.FC = () => {
           aria-label="Listen on SoundCloud"
         >
            {/* <span className="text-3xl">☁️</span> Placeholder */}
-           <FaSoundcloud size={30} className="text-[var(--color-content-light)]"/>
+           <FaSoundcloud size={30} className="text-[var(--color-content-light)] dark:text-[var(--color-content-dark)]"/>
         </a>
 
          {/* Instagram Link */}
@@ -59,7 +59,7 @@ const Contact: React.FC = () => {
           aria-label="Follow on Instagram"
         >
            {/* <span className="text-3xl">📸</span> Placeholder */}
-           <FaInstagram size={30} className="text-[var(--color-content-light)]"/>
+           <FaInstagram size={30} className="text-[var(--color-content-light)] dark:text-[var(--color-content-dark)]"/>
         </a>
 
         {/* Add more links similarly */}
