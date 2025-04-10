@@ -18,12 +18,15 @@
     --color-content-light: var(--color-gray-700); /* light mode not the lighter color */
     --color-content-dark: var(--color-gray-50);
   }
-  .dark {
-    --color-mizu-light: rgb(130, 130, 184);
-    --color-content-light: var(--color-content-dark);
-    --color-element-light: var(var(--color-element-dark));
-    --layout-bg-color: var(--color-mizu-dark);
+  @media (prefers-color-scheme: dark) {
+     .dark {
+      --color-mizu-light: rgb(130, 130, 184);
+      --color-content-light: var(--color-content-dark);
+      --color-element-light: var(var(--color-element-dark));
+      --layout-bg-color: var(--color-mizu-dark);
+    }
   }
+ 
 
   .mizu-bg {
     background-image: url(/src/assets/mizu-left.png);
