@@ -220,7 +220,7 @@ useEffect(() => {
   }, [repeatMode]); // This effect ONLY runs when repeatMode changes
   
   if (!trackSrc) {
-    return <div className="mt-4 p-4 text-center text-[var(--color-content-light)] ">Select a track to play</div>;
+    return <div className="mt-4 p-4 text-center text-[var(--color-content-light)] dark:text-[var(--color-content-dark)]">Select a track to play</div>;
   }
   return (
     <div className="mt-4 p-4 rounded flex flex-wrap flex-col md:flex-row items-center gap-3 md:gap-4">
