@@ -208,7 +208,7 @@ const playPreviousTrack = useCallback(() => {
   return (
     <div className="p-4">
       <div className="mb-6">
-        <Link to="/" className="text-sm text-[var(--color-content-light)]  hover:underline">
+        <Link to="/" className="text-sm text-[var(--color-content-dark)]  hover:underline">
           &larr; Back to Directory
         </Link>
       </div>

@@ -13,7 +13,7 @@ const Contact: React.FC = () => {
 
   return (
     <section className="content-section shadow-md"> {/* Use consistent styling with Bio */}
-      <h2 className="text-2xl font-bold mb-4 text-[var(--color-content-light)] font-title text-center"> {/* Use themed font */}
+      <h2 className="text-2xl font-bold mb-4 text-[var(--color-content-light)] dark:text-[var(--color-content-dark)] font-title text-center"> {/* Use themed font */}
       ─⋆⋅☆ Connect & Listen ⋆─
       </h2>
       <div className="flex flex-wrap justify-center gap-4"> {/* Flexbox for layout */}

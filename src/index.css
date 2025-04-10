@@ -37,9 +37,11 @@
 
   .bg-mizu-light {
     background-color: var(--color-mizu-light);
-    .dark & {
-      background-color: var(--color-mizu-dark);
-    }
+    @media (prefers-color-scheme: dark) {
+      .dark & {
+        background-color: var(--color-mizu-dark);
+      }
+  }
   }
   .bg-mizu-dark {
     background-color: var(--color-mizu-dark);
@@ -66,10 +68,11 @@
     padding-top: 50px;
     padding-bottom: 50px;
     vertical-align: text-bottom;
-
-    .dark & {
-      background-blend-mode: color-burn;
-    }
+    @media (prefers-color-scheme: dark) {
+      .dark & {
+        background-blend-mode: color-burn;
+      }
+  }
   }
   
   .custom-footer {
@@ -81,12 +84,14 @@
     text-align: center; /* Equivalent to text-center */
     box-shadow: 0 0 5px 5px var(--color-element-light); /* Box shadow above */
     text-decoration-color: var(--color-element-dark);
-    .dark & {
-      background-color: var(--color-element-dark); /* Equivalent to bg-gray-500 (using Tailwind's gray scale) */
-      color: var(--color-element-light); /* Equivalent to text-gray-50 */
-      box-shadow: 0 0 5px 5px var(--color-element-dark); /* Box shadow above */
-      text-decoration-color: var(--color-element-light);
-    }
+    @media (prefers-color-scheme: dark) {
+      .dark & {
+        background-color: var(--color-element-dark); /* Equivalent to bg-gray-500 (using Tailwind's gray scale) */
+        color: var(--color-element-light); /* Equivalent to text-gray-50 */
+        box-shadow: 0 0 5px 5px var(--color-element-dark); /* Box shadow above */
+        text-decoration-color: var(--color-element-light);
+      }
+  }
   }
 
   
@@ -106,9 +111,10 @@
     opacity: 90%;
     border-radius: var(--radius-lg) /* 0.5rem = 8px */;
     align-items: center;
-    .dark & {
-      background-color: var(--color-element-dark);
+    @media (prefers-color-scheme: dark) {
+      .dark & {
+        background-color: var(--color-element-dark);
+      }
     }
-    
   }
 }

@@ -70,12 +70,12 @@ const DirectoryView: React.FC<{ albums?: Album[] }> = () => { // Optional prop f
               {album.albumArtSrc ? (
                 <img src={album.albumArtSrc} alt={`Cover for ${album.title}`} className="w-full h-full object-cover"/>
               ) : (
-                 <span className="text-9xl text-[var(--color-element-light)]">🎵</span> // Placeholder
+                 <span className="text-9xl text-[var(--color-element-light)] dark:text-[var(--color-element-dark)]">🎵</span> // Placeholder
               )}
             </div>
             {/* Album Info */}
             <div className="p-3 text-[var(--color-element-light)]">
-               <h3 className="font-semibold truncate font-title text-[var(--color-content-light)] group-hover:text-mizu-dark dark:group-hover:text-mizu-light" title={album.title}>
+               <h3 className="font-semibold truncate font-title text-[var(--color-content-light)] dark:text-[var(--color-content-dark)] group-hover:text-mizu-dark dark:group-hover:text-mizu-light" title={album.title}>
                   {album.title}
                 </h3>
                {album.year && <p className="text-sm text-neutral-600 dark:text-neutral-400">{album.year}</p>}

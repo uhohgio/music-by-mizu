@@ -303,7 +303,7 @@ useEffect(() => {
         step="0.1" // Allow finer seeking
         value={currentTime}
         onChange={handleSeek}
-        className="flex-grow h-2 bg-gray-300 dark:bg-gray-600 rounded-full appearance-none cursor-pointer accent-mizu-dark dark:accent-mizu-light disabled:opacity-50 disabled:cursor-not-allowed" // Basic styling + accent color
+        className="flex-grow h-2 bg-gray-200 dark:bg-gray-600 rounded-full appearance-none cursor-pointer accent-mizu-dark dark:accent-mizu-light disabled:opacity-50 disabled:cursor-not-allowed" // Basic styling + accent color
         disabled={!isMetadataLoaded || duration === 0} // Disable until ready
       />
 
@@ -327,7 +327,7 @@ useEffect(() => {
             step="0.02" // Finer steps for volume
             value={volume}
             onChange={handleVolumeChange}
-            className="w-16 md:w-20 h-1 bg-gray-300 dark:bg-gray-600 rounded-full appearance-none cursor-pointer accent-mizu-dark dark:accent-mizu-light disabled:opacity-50 disabled:cursor-not-allowed" // Shorter slider for volume
+            className="w-16 md:w-20 h-1 bg-gray-200 dark:bg-gray-600 rounded-full appearance-none cursor-pointer accent-mizu-dark dark:accent-mizu-light disabled:opacity-50 disabled:cursor-not-allowed" // Shorter slider for volume
             disabled={!isMetadataLoaded}
             aria-label="Volume"
           />

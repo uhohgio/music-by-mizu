@@ -27,7 +27,7 @@ const TrackList: React.FC<TrackListProps> = ({ tracks, onSelectTrack, currentTra
             
             // Style list items
             >
-                <span className={` ${isActive ? 'font-bold text-[var(--color-content-light)]' : 'font-semibold text-[var(--color-content-light)]'}`}> {/* Adjust text color based on active state */}
+                <span className={` ${isActive ? 'font-bold text-[var(--color-content-light)] dark:text-[var(--color-content-dark)]' : 'font-semibold text-[var(--color-content-light)]'}`}> {/* Adjust text color based on active state */}
                 {track.title} 
                 </span>
                 
