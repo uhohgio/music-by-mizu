@@ -1,0 +1,30 @@
+backend:
+  name: github
+  repo: your-username/your-portfolio-repo  # your GitHub repo
+  branch: main
+
+media_folder: "public/uploads"   # where uploaded images go
+public_folder: "/uploads"
+
+collections:
+  - name: "about"
+    label: "About Section"
+    files:
+      - file: "src/content/about.json"
+        label: "About Me"
+        name: "about"
+        fields:
+          - { label: "Name", name: "name", widget: "string" }
+          - { label: "Bio", name: "bio", widget: "text" }
+          - { label: "Profile Picture", name: "picture", widget: "image" }
+
+  - name: "projects"
+    label: "Projects"
+    folder: "src/content/projects"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Description", name: "description", widget: "text" }
+      - { label: "Link", name: "link", widget: "string" }
+      - { label: "Image", name: "image", widget: "image" }

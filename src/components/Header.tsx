@@ -4,11 +4,16 @@
 import React from 'react';
 
 const Header: React.FC = () => {
-  // Apply Tailwind classes for basic styling
   return (
-    // <header className="bg-gray-500 text-gray-50 p-4 align-middle text-center">
-    <header className="cloud-header text-gray-800 text-center p-3">
-    </header>
+    <img
+      src="/mizuHeader.png"
+      alt="Mizu Header"
+      className="fixed top-0 left-1/2 transform -translate-x-1/2 min-h-[330px] w-full max-w-[1150px]  object-cover object-center mt-[-100px]"
+      style={{
+        filter: "brightness(1.4) saturate(60%) opacity(0.75)",
+        zIndex: 5,
+      }}
+    />
   );
 };
 

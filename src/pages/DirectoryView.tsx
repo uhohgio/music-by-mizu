@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'; // For navigation links
 import type { Album } from '../types'; // Import Album type (summary version if defined)
+import Bio from '../components/Bio'
+import Contact from '../components/Contact';
 
 // Define a type for the summary data we expect from the API
 interface AlbumSummary {
@@ -22,12 +24,13 @@ const DirectoryView: React.FC<{ albums?: Album[] }> = () => { // Optional prop f
       setIsLoading(true);
       setError(null);
       try {
-        const response = await fetch('/api/albums'); // Fetch from our API endpoint
+        const response = await fetch('/music.json'); // Fetch from our API endpoint
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data: AlbumSummary[] = await response.json();
         setAlbums(data);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (e: any) {
         console.error("Failed to fetch albums:", e);
         setError('Failed to load music library. Please try again later.');
@@ -45,7 +48,7 @@ const DirectoryView: React.FC<{ albums?: Album[] }> = () => { // Optional prop f
   }
 
   if (error) {
-    return <div className="text-center p-10 text-red-500">{error}</div>;
+    return <div className="text-center p-10 text-red-900">{error}</div>;
   }
 
   if (albums.length === 0) {
@@ -54,11 +57,11 @@ const DirectoryView: React.FC<{ albums?: Album[] }> = () => { // Optional prop f
 
   return (
     <div className="p-4">
-      <h1 className="text-3xl font-bold mb-6 text-center font-title text-neutral-800 dark:text-neutral-100 tracking-wider ">
+      <h1 className="text-3xl font-bold mb-6 text-center font-title text-neutral-800 dark:text-neutral-100 tracking-wider mt-0">
       ˗ˏˋ directory ˎˊ˗
       </h1>
       {/* Grid layout for albums */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="m-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
         {albums.map((album) => (
           <Link
             key={album.id}
@@ -83,6 +86,8 @@ const DirectoryView: React.FC<{ albums?: Album[] }> = () => { // Optional prop f
           </Link>
         ))}
       </div>
+      <Bio />
+      <Contact />
     </div>
   );
 };

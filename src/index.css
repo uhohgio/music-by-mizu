@@ -24,12 +24,6 @@
     --layout-bg-color: var(--color-mizu-dark);
   }
 
-  .mizu-bg {
-    background-image: url(/src/assets/mizu-left.png);
-    background-repeat: no-repeat;
-    background-size:cover;
-    background-position: center;
-  }
 
   .bg-mizu-light {
     background-color: var(--color-mizu-light);
@@ -99,7 +93,7 @@
     max-width: 90%;
     padding: calc(var(--spacing) * 6) /* 1.5rem = 24px */;
     background-color: var(--color-element-light);
-    opacity: 90%;
+    opacity: 95%;
     border-radius: var(--radius-lg) /* 0.5rem = 8px */;
     align-items: center;
     .dark & {

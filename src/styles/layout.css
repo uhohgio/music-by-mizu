@@ -1,0 +1,37 @@
+  .mizu-bg {
+    background-image: url(/src/assets/mizu-left-blur.png);
+    background-repeat: no-repeat;
+    background-size:cover;
+    background-position: center;
+    z-index: -1;
+  }
+
+  .main-info {
+    position: relative;
+    z-index: 2;
+    filter: blur(0px);
+  }
+
+  /* Custom scrollbar styling */
+.custom-scroll::-webkit-scrollbar {
+  width: 14px;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* For Firefox */
+.custom-scroll {
+  scrollbar-width: auto;
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+}

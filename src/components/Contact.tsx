@@ -2,13 +2,14 @@
 import React from 'react';
 // Optional: Import an icon library if you want icons
 import { FaEnvelope, FaSpotify, FaSoundcloud, FaInstagram } from 'react-icons/fa'; // Example using react-icons
+import contactData from "../content/contact.json"; // Import contact links from JSON
 
 const Contact: React.FC = () => {
   // Define your links (can be moved to props later)
-  const email = 'mailto:erikts777@icloud.com'; // Use mailto: for email links
-  const spotifyUrl = 'https://open.spotify.com/artist/1e7K8jD3wRuQfnwDAOeGqe?si=dqcw1rXoQhOIBYnSf_WYUA';
-  const soundcloudUrl = 'https://soundcloud.com/madeon';
-  const instagramUrl = "https://www.instagram.com/musicbymizu/";
+  const email = contactData.email; // Use mailto: for email links
+  const spotifyUrl = contactData.spotifyUrl;
+  const soundcloudUrl = contactData.soundcloudUrl;
+  const instagramUrl = contactData.instagramUrl;
   // Add other links as needed (Bandcamp, YouTube, etc.)
 
   return (

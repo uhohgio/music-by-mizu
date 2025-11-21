@@ -1,348 +1,295 @@
 // src/components/MusicPlayer.tsx
-import React, { useRef, useEffect, useState} from 'react';
-import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute, FaVolumeDown, FaVolumeOff, FaStepBackward, FaStepForward, FaMusic, FaRedo, FaRandom } from 'react-icons/fa'
-import { TbRepeatOnce } from 'react-icons/tb'; // Example for 'repeat one' icon
+"use client";
+import React, { useRef, useEffect, useState, useCallback } from 'react';
+import {
+  FaPlay, FaPause, FaStepBackward, FaStepForward, FaMusic,
+  FaRedo, FaRandom, FaVolumeUp, FaVolumeMute,
+  FaVolumeDown, FaVolumeOff
+} from 'react-icons/fa';
+import { TbRepeatOnce } from 'react-icons/tb';
+import { usePlayerStore, selectCurrentTrack } from '../store/playerStore';
+import Footer from './Footer';
 
-interface MusicPlayerProps {
-  trackSrc: string | null; // URL of the track to play, or null if none selected
-  trackTitle: string; // Add title prop
-  albumArtSrc: string | null | undefined; // Add art source prop
-  onPlayNext: () => void; // Handler for next button
-  onPlayPrevious: () => void; // Handler for previous button
-  hasNext: boolean; // Flag to enable/disable next button
-  hasPrevious: boolean; // Flag to enable/disable previous button
-  repeatMode: 'none' | 'one' | 'all';
-  onToggleRepeat: () => void;
-  onTrackEnd: () => void; // Callback for when track finishes
-  isShuffled: boolean;
-  onToggleShuffle: () => void;
-}
+// ---- Helpers ----
+const formatTime = (time: number) => {
+  if (!isFinite(time)) return "00:00";
+  const m = Math.floor(time / 60).toString().padStart(2, "0");
+  const s = Math.floor(time % 60).toString().padStart(2, "0");
+  return `${m}:${s}`;
+};
 
+const MusicPlayer: React.FC = () => {
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const previousVolumeRef = useRef(1);
 
-// Helper function to format time (e.g., 123 seconds -> "02:03")
-const formatTime = (timeInSeconds: number): string => {
-    if (isNaN(timeInSeconds) || timeInSeconds === Infinity) {
-      return '00:00';
+  // ---- Subscribe to ONLY what you need ----
+  const currentTrack = usePlayerStore(selectCurrentTrack);
+  const queue = usePlayerStore(s => s.queue);
+  const currentTrackIndex = usePlayerStore(s => s.currentTrackIndex);
+  const isPlaying = usePlayerStore(s => s.isPlaying);
+  const volume = usePlayerStore(s => s.volume);
+  const isMuted = usePlayerStore(s => s.isMuted);
+  const repeatMode = usePlayerStore(s => s.repeatMode);
+  const isShuffled = usePlayerStore(s => s.isShuffled);
+  const albumArtSrc = usePlayerStore(s => s.currentAlbum?.albumArtSrc);
+
+  // Actions
+  const setVolume = usePlayerStore(s => s.setVolume);
+  const toggleRepeat = usePlayerStore(s => s.toggleRepeat);
+  const toggleShuffle = usePlayerStore(s => s.toggleShuffle);
+  const setIsPlaying = usePlayerStore(s => s.setIsPlaying);
+  const handleTrackEnd = usePlayerStore(s => s.handleTrackEnd);
+  const playNext = usePlayerStore(s => s.playNext);
+  const playPrevious = usePlayerStore(s => s.playPrevious);
+  const togglePlayPause = usePlayerStore(s => s.togglePlayPause);
+
+  // ---- Derived data ----
+  const trackSrc = currentTrack?.audioSrc ?? null;
+  const trackTitle = currentTrack?.title ?? "";
+
+  // ---- Local UI state ----
+  const [duration, setDuration] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [isMetadataLoaded, setIsMetadataLoaded] = useState(false);
+
+  // ---- Stable callbacks ----
+  const handleLoadedMetadata = useCallback(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const d = audio.duration;
+    if (isFinite(d)) {
+      setDuration(d);
+      setIsMetadataLoaded(true);
+    } else {
+      setDuration(0);
+      setIsMetadataLoaded(false);
     }
-    const floorTime = Math.floor(timeInSeconds);
-    const minutes = Math.floor(floorTime / 60);
-    const seconds = floorTime % 60;
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  }, []);
+
+  const handleTimeUpdate = useCallback(() => {
+    if (audioRef.current) {
+      setCurrentTime(audioRef.current.currentTime);
+    }
+  }, []);
+
+  const handleTrackEndInternal = useCallback(() => {
+    if (repeatMode !== "one") handleTrackEnd();
+  }, [repeatMode, handleTrackEnd]);
+
+  // ---- SEEK ----
+  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    const t = parseFloat(e.target.value);
+    audio.currentTime = t;
+    setCurrentTime(t);
   };
-  
 
-const MusicPlayer: React.FC<MusicPlayerProps> = ({ 
-    trackSrc,
-    trackTitle,
-    albumArtSrc, 
-    onPlayNext,
-    onPlayPrevious,
-    hasNext,
-    hasPrevious, 
-    repeatMode,
-    onToggleRepeat,
-    onTrackEnd,
-    isShuffled,
-    onToggleShuffle,
-}) => {
-    const audioRef = useRef<HTMLAudioElement>(null); // Ref to access the audio element
+  // ---- VOLUME ----
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const v = parseFloat(e.target.value);
+    const audio = audioRef.current;
+    if (audio) {
+      audio.volume = v;
+      audio.muted = v === 0;
+    }
+    setVolume(v);
+  };
 
-   // State variables
-    const [isPlaying, setIsPlaying] = useState(false); // checks if the song is playing
-    const [duration, setDuration] = useState(0); // current song duration
-    const [currentTime, setCurrentTime] = useState(0); // follows time as song plays
-    const [isMetadataLoaded, setIsMetadataLoaded] = useState(false); // Track if duration is ready
-    const [volume, setVolume] = useState(1); // Volume range: 0 to 1 (1 = 100%)
-    const [isMuted, setIsMuted] = useState(false); // Optional: For mute toggle state
-    const previousVolumeRef = useRef(1); // Store volume before muting
- 
+  const toggleMuteInternal = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
 
-   // --- Event Handlers for Audio Element ---
+    if (isMuted || volume === 0) {
+      const restore = previousVolumeRef.current || 0.5;
+      audio.muted = false;
+      setVolume(restore);
+    } else {
+      previousVolumeRef.current = volume;
+      audio.muted = true;
+      setVolume(0);
+    }
+  };
 
-    // Update duration when metadata loads
-    const handleLoadedMetadata = () => {
-        if (audioRef.current) {
-        setDuration(audioRef.current.duration);
-        setIsMetadataLoaded(true); // Mark metadata as loaded
+  // ---- EFFECT: Load track ----
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    // FULL RESET (important!)
+    audio.pause();
+    audio.removeAttribute("src"); 
+    audio.load(); 
+
+    setIsMetadataLoaded(false);
+    setCurrentTime(0);
+    setDuration(0);
+
+    if (!trackSrc) return;
+
+    // Attach listeners BEFORE setting src
+    const onLoadedMetadata = () => {
+        const d = audio.duration;
+        if (isFinite(d) && d > 0) {
+        setDuration(d);
+        setIsMetadataLoaded(true);
         }
-    }; // No dependencies, function identity is stable
+    };
 
+    const onPlay = () => setIsPlaying(true);
+    const onPause = () => setIsPlaying(false);
 
-    // Update current time as the track plays
-    const handleTimeUpdate = () => {
-        if (audioRef.current) {
-        setCurrentTime(audioRef.current.currentTime);
+    audio.addEventListener("loadedmetadata", handleLoadedMetadata);
+    audio.addEventListener("timeupdate", handleTimeUpdate);
+    audio.addEventListener("ended", handleTrackEndInternal);
+    audio.addEventListener("play", onPlay);
+    audio.addEventListener("pause", onPause);
+
+    audio.addEventListener("loadedmetadata", onLoadedMetadata);
+
+    const newSrc = new URL(trackSrc, window.location.origin).toString();
+    if (audio.currentSrc !== newSrc) {
+        audio.src = trackSrc;
+        audio.load();
         }
-    } // No dependencies
-
-    // Reset state when track ends
-    const handleTrackEnd = () => {
-        setIsPlaying(false);
-        // Optional: set currentTime back to 0? Or implement play next?
-        if (repeatMode !== 'one') {
-            onTrackEnd(); //moves on once the track ends
-         }
-        if (audioRef.current) {
-          audioRef.current.currentTime = 0;
-        }
-    }; 
-
+    return () => {
+        audio.removeEventListener("loadedmetadata", onLoadedMetadata);
+        audio.removeEventListener("timeupdate", handleTimeUpdate);
+        audio.removeEventListener("ended", handleTrackEndInternal);
+        audio.removeEventListener("play", onPlay);
+        audio.removeEventListener("pause", onPause);
+    };
     
+  }, [trackSrc, handleLoadedMetadata, handleTimeUpdate, handleTrackEndInternal, setIsPlaying]);
 
-  // --- Control Handlers ---
+  // ---- EFFECT: Play/pause sync ----
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio || !trackSrc) return;
 
-    // Toggle play/pause
-    const togglePlayPause = () => {
-        if (!audioRef.current) return;
-
-        if (isPlaying) {
-        audioRef.current.pause();
-        } else {
-        // Attempt to play, handle potential errors (e.g., browser restrictions)
-        audioRef.current.play().catch(e => console.error("Error playing audio:", e));
-        }
-        setIsPlaying(!isPlaying); // Optimistically update state, actual state syncs via onPlay/onPause listeners
-    };
-
-    // Handle seeking using the range input
-    const handleSeek = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (audioRef.current) {
-        const newTime = parseFloat(event.target.value);
-        audioRef.current.currentTime = newTime;
-        setCurrentTime(newTime); // Update state immediately for smoother UI
-        }
-    };
-
-    // handles volume control
-    const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const newVolume = parseFloat(event.target.value);
-        setVolume(newVolume);
-        setIsMuted(newVolume === 0); // Mute if volume is 0
-        if (audioRef.current) {
-          audioRef.current.volume = newVolume;
-          audioRef.current.muted = newVolume === 0; // Also update the muted property
-        }
-      };
-
-
-    // mutes the audio
-    const toggleMute = () => {
-        if (!audioRef.current) return;
-        const currentlyMuted = !isMuted; // Target state
-        setIsMuted(currentlyMuted);
-        audioRef.current.muted = currentlyMuted;
-  
-        if (currentlyMuted) {
-            previousVolumeRef.current = volume; // Store current volume
-            setVolume(0); // Set slider/state to 0
-        } else {
-            // If unmuting and previous volume was 0, set to a default (e.g., 0.5)
-            const volumeToRestore = previousVolumeRef.current > 0 ? previousVolumeRef.current : 0.5;
-            setVolume(volumeToRestore);
-            audioRef.current.volume = volumeToRestore;
-        }
-    };
-
-// --- Effect for Loading New Track ---
-
-useEffect(() => {
-    setIsMetadataLoaded(false); // Reset metadata flag when track changes
-    setIsPlaying(false); // Stop playback when track changes
-    setCurrentTime(0); // Reset time
-    setDuration(0); // Reset duration
-
-    if (trackSrc && audioRef.current) {
-      audioRef.current.src = trackSrc;
-      audioRef.current.load(); // Important: Load the new source
-
-      // Restore volume/mute state potentially stored
-      audioRef.current.volume = volume;
-      audioRef.current.muted = isMuted;
-
-        // Set the loop attribute based on the repeatMode prop
-
-      // Attempt to play the track automatically
-      const playPromise = audioRef.current.play();
-
-      // handles autoplay
-      if (playPromise !== undefined) {
-        playPromise
-        //   .then(_ => {
-        //     // Autoplay started! The 'onPlay' event listener we added earlier
-        //     // should automatically set the isPlaying state to true.
-        //     console.log(`Autoplay successful for: ${trackSrc}`);
-        //   })
-          .catch(error => {
-            // Autoplay was prevented by the browser.
-            console.error(`Autoplay prevented for ${trackSrc}:`, error);
-            // Ensure the UI reflects that it's not playing if autoplay fails
-            setIsPlaying(false);
-          });
+    if (isPlaying) {
+      if (audio.paused) {
+        audio.play().catch(() => setIsPlaying(false));
       }
+    } else {
+      if (!audio.paused) audio.pause();
+    }
+  }, [isPlaying, trackSrc, setIsPlaying]);
 
-      // Set up event listeners for the audio element
-      const audio = audioRef.current; // Capture current ref value
+  // ---- EFFECT: Sync volume ----
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (audio) {
       audio.volume = volume;
       audio.muted = isMuted;
-      audio.addEventListener('loadedmetadata', handleLoadedMetadata);
-      audio.addEventListener('timeupdate', handleTimeUpdate);
-      audio.addEventListener('ended', handleTrackEnd);
-      // Listeners to sync isPlaying state more accurately
-      audio.addEventListener('play', () => setIsPlaying(true));
-      audio.addEventListener('pause', () => setIsPlaying(false));
-      audio.addEventListener('volumechange', () => {
-        // Sync state if volume/mute changed externally (less common)
-        if (audioRef.current) {
-            setVolume(audioRef.current.volume);
-            setIsMuted(audioRef.current.muted);
-        }
-    });
-
-
-      // Cleanup function: remove listeners when component unmounts or trackSrc changes
-      return () => {
-        audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
-        audio.removeEventListener('timeupdate', handleTimeUpdate);
-        audio.removeEventListener('ended', handleTrackEnd);
-        audio.removeEventListener('play', () => setIsPlaying(true));
-        audio.removeEventListener('pause', () => setIsPlaying(false));
-        audio.removeEventListener('volumechange', () => handleVolumeChange);
-      };
     }
-  }, [trackSrc]);// Add handlers as dependencies
+  });
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (audio) {
+      audio.volume = volume;
+      audio.muted = isMuted;
+    }
+  }, [volume, isMuted]);
 
+  // ---- EFFECT: Loop ----
   useEffect(() => {
     if (audioRef.current) {
-      // Set the loop attribute based on the repeatMode prop
-      audioRef.current.loop = (repeatMode === 'one');
+      audioRef.current.loop = repeatMode === "one";
     }
-  }, [repeatMode]); // This effect ONLY runs when repeatMode changes
-  
-  if (!trackSrc) {
-    return <div className="mt-4 p-4 text-center text-[var(--color-content-light)] ">Select a track to play</div>;
-  }
-  return (
-    <div className="mt-4 p-4 rounded flex flex-wrap flex-col md:flex-row items-center gap-3 md:gap-4">
-      {/* Audio element - hidden but necessary */}
-      <audio ref={audioRef} preload="metadata"> {/* Preload metadata to get duration sooner */}
-        Your browser does not support the audio element. ˙◠˙
-      </audio>
+  }, [repeatMode]);
 
-    {/* --- Album Art Section --- */}
-    <div className="flex-shrink-0 w-10 h-10 md:w-10 md:h-10 bg-gray-300 dark:bg-neutral-600 rounded overflow-hidden flex items-center justify-center">
+  // ---- NAV LOGIC ----
+  const canWrap = repeatMode === "all" || isShuffled;
+  const hasPrev =
+    queue.length > 1 &&
+    (canWrap || (currentTrackIndex !== null && currentTrackIndex > 0));
+  const hasNext =
+    queue.length > 1 &&
+    (canWrap || (currentTrackIndex !== null && currentTrackIndex < queue.length - 1));
+
+  // ---- NO TRACK ----
+  if (!trackSrc) {
+    return (
+      <div className="pt-4 w-full flex-wrap"><Footer /></div>
+    );
+  }
+
+  return (
+    <div className="p-4 bg-gray-100 dark:bg-neutral-800 shadow-md flex items-center gap-4 w-full flex-wrap">
+
+      <div className="w-16 h-16 bg-gray-300 dark:bg-neutral-600 rounded overflow-hidden flex items-center justify-center">
         {albumArtSrc ? (
-          <img
-            src={albumArtSrc}
-            alt={`Album art for ${trackTitle}`}
-            className="w-full h-full object-cover" // Cover ensures image fills space
-          />
+          <img src={albumArtSrc} alt="Album art" className="w-full h-full object-cover" />
         ) : (
-          // Placeholder Icon if no album art
-          <FaMusic className="text-2xl text-gray-500 dark:text-neutral-400" />
+          <FaMusic className="text-2xl text-gray-500" />
         )}
       </div>
 
-      {/* --- Add Repeat Button --- */}
-      <button
-               onClick={onToggleRepeat}
-               className={`p-2 text-lg rounded-full hover:bg-gray-200 dark:hover:bg-neutral-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors
-                 ${repeatMode !== 'none' ? 'text-mizu-dark dark:text-mizu-light' : 'text-neutral-500 dark:text-neutral-400'}
-               `}
-               aria-label={`Repeat mode: ${repeatMode}`}
-               title={`Repeat mode: ${repeatMode}`}
-               disabled={!isMetadataLoaded}
-             >
-               {repeatMode === 'one' ? <TbRepeatOnce /> : <FaRedo />}
-             </button>
+      <div className="flex flex-col flex-grow gap-2 min-w-0">
+        <p className="text-sm font-semibold truncate text-neutral-900 dark:text-neutral-100">
+          {trackTitle}
+        </p>
 
-    {/* Main Controls Group (Prev, Play/Pause, Next) */}  
-    <div className="flex items-center gap-3">
-      {/* Previous Button */}
-      <button
-           onClick={onPlayPrevious}
-           className="p-2 rounded-full bg-mizu-light dark:bg-mizu-dark text-white hover:opacity-85 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-           aria-label="Previous track"
-           disabled={!hasPrevious || !isMetadataLoaded} // Disable if no previous or not ready
-         >
-           <FaStepBackward />
-         </button>
+        <div className="flex flex-col sm:flex-row items-center gap-3">
 
-      {/* Play/Pause Button */}
-      <button
-        onClick={togglePlayPause}
-        className="p-2 rounded-full bg-mizu-light dark:bg-mizu-dark text-white hover:opacity-85 transition-opacity disabled:opacity-50"
-        aria-label={isPlaying ? 'Pause' : 'Play'}
-        disabled={!isMetadataLoaded} // Disable button until duration is known
-      >
-        {isPlaying ? <FaPause /> : <FaPlay />}
-      </button>
-      {/* Next Button */}
-      <button
-           onClick={onPlayNext}
-           className="p-2 rounded-full bg-mizu-light dark:bg-mizu-dark text-white hover:opacity-85 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-           aria-label="Next track"
-           disabled={!hasNext || !isMetadataLoaded} // Disable if no next or not ready
-         >
-           <FaStepForward />
-         </button>
-    </div>
+          <audio ref={audioRef} preload="metadata" />
 
-    {/* Seek/Time Group */}
-    <div className="flex items-center gap-2 flex-grow w-full md:w-auto">
-      {/* Current Time */}
-      <span className="text-sm text-neutral-700 dark:text-neutral-300 font-mono w-12 text-right">
-        {formatTime(currentTime)}
-      </span>
+          {/* Repeat */}
+          <button onClick={toggleRepeat} className={`p-2 text-lg text-mizu-dark dark:text-mizu-light'} ${repeatMode !== 'none' ? 'text-mizu-dark dark:text-mizu-light' : 'text-neutral-500 dark:text-neutral-400'}`}>
+            {repeatMode === "one" ? <TbRepeatOnce /> : <FaRedo />}
+          </button>
 
-      {/* Seek Bar */}
-      <input
-        type="range"
-        min="0"
-        max={duration || 1} // Duration might be 0 initially
-        step="0.1" // Allow finer seeking
-        value={currentTime}
-        onChange={handleSeek}
-        className="flex-grow h-2 bg-gray-300 dark:bg-gray-600 rounded-full appearance-none cursor-pointer accent-mizu-dark dark:accent-mizu-light disabled:opacity-50 disabled:cursor-not-allowed" // Basic styling + accent color
-        disabled={!isMetadataLoaded || duration === 0} // Disable until ready
-      />
+          {/* Prev */}
+          <button onClick={playPrevious} disabled={!hasPrev} className="p-2 bg-mizu-light dark:bg-mizu-dark text-white rounded-full">
+            <FaStepBackward />
+          </button>
 
-      {/* Duration */}
-      <span className="text-sm text-neutral-700 dark:text-neutral-300 font-mono w-12">
-        {formatTime(duration)}
-      </span>
-    </div>
-
-    {/* Volume Controls Group */}
-    <div className="flex items-center gap-2">
-          {/* Mute Toggle Button */}
-           <button onClick={toggleMute} className="text-neutral-600 dark:text-neutral-300 hover:opacity-75 disabled:opacity-50" disabled={!isMetadataLoaded}>
-               {isMuted ? <FaVolumeMute /> : volume > 0.5 ? <FaVolumeUp /> : volume > 0 ? <FaVolumeDown /> : <FaVolumeOff />}
-           </button>
-          {/* Volume Slider */}
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.02" // Finer steps for volume
-            value={volume}
-            onChange={handleVolumeChange}
-            className="w-16 md:w-20 h-1 bg-gray-300 dark:bg-gray-600 rounded-full appearance-none cursor-pointer accent-mizu-dark dark:accent-mizu-light disabled:opacity-50 disabled:cursor-not-allowed" // Shorter slider for volume
+          {/* Play/Pause */}
+          <button
+            onClick={togglePlayPause}
             disabled={!isMetadataLoaded}
-            aria-label="Volume"
-          />
-    </div>
-    {/* --- Add Shuffle Button Placeholder (Add later) --- */}
-    <button
-               onClick={onToggleShuffle}
-               className={`p-2 text-lg rounded-full hover:bg-gray-200 dark:hover:bg-neutral-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors
-                 ${isShuffled ? 'text-mizu-dark dark:text-mizu-light' : 'text-neutral-500 dark:text-neutral-400'}
-               `}
-               aria-label={`Shuffle: ${isShuffled ? 'On' : 'Off'}`}
-               title={`Shuffle: ${isShuffled ? 'On' : 'Off'}`}
-               disabled={!isMetadataLoaded} // Disable if player not ready
-              >
-                <FaRandom />
-              </button>
+            className="p-3 bg-mizu-light dark:bg-mizu-dark text-white rounded-full"
+          >
+            {isPlaying ? <FaPause /> : <FaPlay />}
+          </button>
+
+          {/* Next */}
+          <button onClick={playNext} disabled={!hasNext} className="p-2 bg-mizu-light dark:bg-mizu-dark text-white rounded-full">
+            <FaStepForward />
+          </button>
+
+          {/* Shuffle */}
+          <button onClick={toggleShuffle} className={`p-2 text-lg text-mizu-dark dark:text-mizu-light ${isShuffled ? 'text-mizu-dark dark:text-mizu-light' : 'text-neutral-500 dark:text-neutral-400'}`}>
+            <FaRandom />
+          </button>
+
+          {/* Seek */}
+          <div className="flex items-center gap-2 flex-grow">
+            <span className="font-mono w-12 text-sm">{formatTime(currentTime)}</span>
+            <input type="range" max={duration || 1} value={currentTime} onChange={handleSeek} className="flex-grow" />
+            <span className="font-mono w-12 text-sm">{formatTime(duration)}</span>
+          </div>
+
+          {/* Volume */}
+          <div className="flex items-center gap-2">
+            <button onClick={toggleMuteInternal}>
+              {isMuted || volume === 0 ? (
+                <FaVolumeMute />
+              ) : volume > 0.5 ? (
+                <FaVolumeUp />
+              ) : volume > 0 ? (
+                <FaVolumeDown />
+              ) : (
+                <FaVolumeOff />
+              )}
+            </button>
+
+            <input type="range" min="0" max="1" step="0.02" value={volume} onChange={handleVolumeChange} className="w-20" />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
