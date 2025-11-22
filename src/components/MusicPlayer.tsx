@@ -161,7 +161,7 @@ const MusicPlayer: React.FC = () => {
         audio.removeEventListener("pause", onPause);
     };
     
-  }, [trackSrc, handleLoadedMetadata, handleTimeUpdate, handleTrackEndInternal, setIsPlaying]);
+  }, [trackSrc]);
 
   // ---- EFFECT: Play/pause sync ----
   useEffect(() => {
@@ -185,13 +185,6 @@ const MusicPlayer: React.FC = () => {
       audio.muted = isMuted;
     }
   });
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (audio) {
-      audio.volume = volume;
-      audio.muted = isMuted;
-    }
-  }, [volume, isMuted]);
 
   // ---- EFFECT: Loop ----
   useEffect(() => {
@@ -217,81 +210,162 @@ const MusicPlayer: React.FC = () => {
   }
 
   return (
-    <div className="p-4 bg-gray-100 dark:bg-neutral-800 shadow-md flex items-center gap-4 w-full flex-wrap">
+  <div className="p-4 bg-gray-100 dark:bg-gray-800 shadow-md flex items-center gap-4 w-full flex-wrap">
 
-      <div className="w-16 h-16 bg-gray-300 dark:bg-neutral-600 rounded overflow-hidden flex items-center justify-center">
-        {albumArtSrc ? (
-          <img src={albumArtSrc} alt="Album art" className="w-full h-full object-cover" />
-        ) : (
-          <FaMusic className="text-2xl text-gray-500" />
-        )}
-      </div>
+    {/* Album Art */}
+    <div className="w-16 h-16 bg-gray-300 dark:bg-gray-600 rounded overflow-hidden flex items-center justify-center">
+      {albumArtSrc ? (
+        <img src={albumArtSrc} alt="Album art" className="w-full h-full object-cover" />
+      ) : (
+        <FaMusic className="text-2xl text-gray-500" />
+      )}
+    </div>
 
-      <div className="flex flex-col flex-grow gap-2 min-w-0">
-        <p className="text-sm font-semibold truncate text-neutral-900 dark:text-neutral-100">
-          {trackTitle}
-        </p>
+    <div className="flex flex-col flex-grow gap-2 min-w-0">
+      
+      {/* Track Title */}
+      <p className="text-sm font-semibold truncate text-neutral-900 dark:text-neutral-100">
+        {trackTitle}
+      </p>
+      <audio ref={audioRef} preload="metadata" />
+      {/* ============================
+          SMALL SCREEN CONTROLS (≤640px)
+         ============================ */}
+      <div className="flex sm:hidden items-center gap-3 justify-center">
 
-        <div className="flex flex-col sm:flex-row items-center gap-3">
+        <button onClick={playPrevious} disabled={!hasPrev} className="p-2 bg-mizu-light dark:bg-mizu-dark  text-gray-700 dark:text-white rounded-full">
+          <FaStepBackward />
+        </button>
 
-          <audio ref={audioRef} preload="metadata" />
+        <button
+          onClick={togglePlayPause}
+          disabled={!isMetadataLoaded}
+          className="p-3 bg-mizu-light dark:bg-mizu-dark text-gray-700 dark:text-white rounded-full"
+        >
+          {isPlaying ? <FaPause /> : <FaPlay />}
+        </button>
 
-          {/* Repeat */}
-          <button onClick={toggleRepeat} className={`p-2 text-lg text-mizu-dark dark:text-mizu-light'} ${repeatMode !== 'none' ? 'text-mizu-dark dark:text-mizu-light' : 'text-neutral-500 dark:text-neutral-400'}`}>
-            {repeatMode === "one" ? <TbRepeatOnce /> : <FaRedo />}
+        <button onClick={playNext} disabled={!hasNext} className="p-2 bg-mizu-light dark:bg-mizu-dark  text-gray-700 dark:text-white rounded-full">
+          <FaStepForward />
+        </button>
+
+        {/* Volume */}
+        <div className="flex items-center gap-2">
+          <button onClick={toggleMuteInternal}>
+            {isMuted || volume === 0 ? (
+              <FaVolumeMute />
+            ) : volume > 0.5 ? (
+              <FaVolumeUp />
+            ) : volume > 0 ? (
+              <FaVolumeDown />
+            ) : (
+              <FaVolumeOff />
+            )}
           </button>
 
-          {/* Prev */}
-          <button onClick={playPrevious} disabled={!hasPrev} className="p-2 bg-mizu-light dark:bg-mizu-dark text-white rounded-full">
-            <FaStepBackward />
-          </button>
-
-          {/* Play/Pause */}
-          <button
-            onClick={togglePlayPause}
-            disabled={!isMetadataLoaded}
-            className="p-3 bg-mizu-light dark:bg-mizu-dark text-white rounded-full"
-          >
-            {isPlaying ? <FaPause /> : <FaPlay />}
-          </button>
-
-          {/* Next */}
-          <button onClick={playNext} disabled={!hasNext} className="p-2 bg-mizu-light dark:bg-mizu-dark text-white rounded-full">
-            <FaStepForward />
-          </button>
-
-          {/* Shuffle */}
-          <button onClick={toggleShuffle} className={`p-2 text-lg text-mizu-dark dark:text-mizu-light ${isShuffled ? 'text-mizu-dark dark:text-mizu-light' : 'text-neutral-500 dark:text-neutral-400'}`}>
-            <FaRandom />
-          </button>
-
-          {/* Seek */}
-          <div className="flex items-center gap-2 flex-grow">
-            <span className="font-mono w-12 text-sm">{formatTime(currentTime)}</span>
-            <input type="range" max={duration || 1} value={currentTime} onChange={handleSeek} className="flex-grow" />
-            <span className="font-mono w-12 text-sm">{formatTime(duration)}</span>
-          </div>
-
-          {/* Volume */}
-          <div className="flex items-center gap-2">
-            <button onClick={toggleMuteInternal}>
-              {isMuted || volume === 0 ? (
-                <FaVolumeMute />
-              ) : volume > 0.5 ? (
-                <FaVolumeUp />
-              ) : volume > 0 ? (
-                <FaVolumeDown />
-              ) : (
-                <FaVolumeOff />
-              )}
-            </button>
-
-            <input type="range" min="0" max="1" step="0.02" value={volume} onChange={handleVolumeChange} className="w-20" />
-          </div>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.02"
+            value={volume}
+            onChange={handleVolumeChange}
+            className="w-20"
+          />
         </div>
       </div>
+
+      {/* =============================
+          LARGE SCREEN CONTROLS (≥640px)
+         ============================= */}
+      <div className="hidden sm:flex flex-col sm:flex-row items-center gap-3">
+
+        {/* Repeat */}
+        <button
+          onClick={toggleRepeat}
+          className={`p-2 text-lg ${
+            repeatMode !== 'none'
+              ? 'text-mizu-dark dark:text-mizu-light'
+              : 'text-gray-500 dark:text-gray-400'
+          }`}
+        >
+          {repeatMode === "one" ? <TbRepeatOnce /> : <FaRedo />}
+        </button>
+
+        {/* Prev */}
+        <button onClick={playPrevious} disabled={!hasPrev} className="p-2 bg-mizu-light dark:bg-mizu-dark  text-gray-700 dark:text-white rounded-full">
+          <FaStepBackward />
+        </button>
+
+        {/* Play / Pause */}
+        <button
+          onClick={togglePlayPause}
+          disabled={!isMetadataLoaded}
+          className="p-3 bg-mizu-light dark:bg-mizu-dark  text-gray-700 dark:text-white rounded-full"
+        >
+          {isPlaying ? <FaPause /> : <FaPlay />}
+        </button>
+
+        {/* Next */}
+        <button onClick={playNext} disabled={!hasNext} className="p-2 bg-mizu-light dark:bg-mizu-dark  text-gray-700 dark:text-white rounded-full">
+          <FaStepForward />
+        </button>
+
+        {/* Shuffle */}
+        <button
+          onClick={toggleShuffle}
+          className={`p-2 text-lg ${
+            isShuffled
+              ? 'text-mizu-dark dark:text-mizu-light'
+              : 'text-gray-500 dark:text-gray-400'
+          }`}
+        >
+          <FaRandom />
+        </button>
+
+        {/* Seek Bar */}
+        <div className="flex items-center gap-2 flex-grow">
+          <span className="font-mono w-12 text-sm">{formatTime(currentTime)}</span>
+          <input
+            type="range"
+            max={duration || 1}
+            value={currentTime}
+            onChange={handleSeek}
+            className="flex-grow"
+          />
+          <span className="font-mono w-12 text-sm">{formatTime(duration)}</span>
+        </div>
+
+        {/* Volume */}
+        <div className="flex items-center gap-2">
+          <button onClick={toggleMuteInternal}>
+            {isMuted || volume === 0 ? (
+              <FaVolumeMute />
+            ) : volume > 0.5 ? (
+              <FaVolumeUp />
+            ) : volume > 0 ? (
+              <FaVolumeDown />
+            ) : (
+              <FaVolumeOff />
+            )}
+          </button>
+
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.02"
+            value={volume}
+            onChange={handleVolumeChange}
+            className="w-20"
+          />
+        </div>
+
+      </div>
     </div>
-  );
+  </div>
+);
+
 };
 
 export default MusicPlayer;

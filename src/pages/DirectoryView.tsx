@@ -57,7 +57,7 @@ const DirectoryView: React.FC<{ albums?: Album[] }> = () => { // Optional prop f
 
   return (
     <div className="p-4">
-      <h1 className="text-3xl font-bold mb-6 text-center font-title text-neutral-800 dark:text-neutral-100 tracking-wider mt-0">
+      <h1 className="text-3xl font-bold mb-6 text-center font-title text-neutral-100 tracking-wider mt-0">
       ˗ˏˋ directory ˎˊ˗
       </h1>
       {/* Grid layout for albums */}

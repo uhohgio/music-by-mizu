@@ -76,7 +76,7 @@ const AlbumPlaybackView: React.FC<{ albums?: Album[] }> = () => {
   if (isLoading) {
     return <div className="text-sm text-[var(--color-content-dark)] flex justify-center items-center">Loading album...</div>;
   } 
-  
+
   if (error) { 
     console.error("Error Occurred: ", error);
     return <div className="text-sm text-[var(--color-content-dark)] flex justify-center items-center">Error: No album data could be loaded.</div>; 
@@ -98,7 +98,7 @@ const AlbumPlaybackView: React.FC<{ albums?: Album[] }> = () => {
 
       {/* Album Header Info */}
       <div className="flex flex-col sm:flex-row items-center gap-4 mb-6 content-section py-4"> {/* Reusing .content-section for bg/shadow */}
-          <div className="flex-shrink-0 w-24 h-24 md:w-32 md:h-32 bg-gray-300 dark:bg-neutral-600 rounded overflow-hidden flex items-center justify-center">
+          <div className="flex-shrink-0 w-24 h-24 md:w-32 md:h-32 bg-gray-500 dark:bg-neutral-600 rounded overflow-hidden flex items-center justify-center">
                {albumData.albumArtSrc ? (
                    <img src={albumData.albumArtSrc} alt={`Cover for ${albumData.title}`} className="w-full h-full object-cover"/>
                 ) : (
