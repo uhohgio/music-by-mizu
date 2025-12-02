@@ -14,7 +14,7 @@ const Contact: React.FC = () => {
 
   return (
     <section className="content-section shadow-md"> {/* Use consistent styling with Bio */}
-      <h2 className="text-2xl font-bold mb-4 text-[var(--color-content-light)] font-title text-center"> {/* Use themed font */}
+      <h2 className="text-2xl font-bold mb-4 text-(--color-content-light) font-title text-center"> {/* Use themed font */}
       ─⋆⋅☆ Connect & Listen ⋆─
       </h2>
       <div className="flex flex-wrap justify-center gap-4"> {/* Flexbox for layout */}
@@ -24,7 +24,7 @@ const Contact: React.FC = () => {
           className="text-[--color-mizu-dark] hover:text-opacity-80 dark:text-[--color-mizu-blue] dark:hover:text-opacity-80 transition-colors duration-200" // Use themed colors
           aria-label="Email Mizu" // Accessibility
         >
-          <FaEnvelope size={30} className="text-[var(--color-content-light)]" />
+          <FaEnvelope size={30} className="text-(--color-content-light)" />
         </a>
 
         {/* Spotify Link */}
@@ -36,7 +36,7 @@ const Contact: React.FC = () => {
           aria-label="Listen on Spotify"
         >
            {/* <span className="text-3xl">🎧</span> Placeholder */}
-           <FaSpotify size={30} className="text-[var(--color-content-light)]"/>
+           <FaSpotify size={30} className="text-(--color-content-light)"/>
         </a>
 
         {/* SoundCloud Link */}
@@ -48,7 +48,7 @@ const Contact: React.FC = () => {
           aria-label="Listen on SoundCloud"
         >
            {/* <span className="text-3xl">☁️</span> Placeholder */}
-           <FaSoundcloud size={30} className="text-[var(--color-content-light)]"/>
+           <FaSoundcloud size={30} className="text-(--color-content-light)"/>
         </a>
 
          {/* Instagram Link */}
@@ -60,7 +60,7 @@ const Contact: React.FC = () => {
           aria-label="Follow on Instagram"
         >
            {/* <span className="text-3xl">📸</span> Placeholder */}
-           <FaInstagram size={30} className="text-[var(--color-content-light)]"/>
+           <FaInstagram size={30} className="text-(--color-content-light)"/>
         </a>
 
         {/* Add more links similarly */}

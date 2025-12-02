@@ -5,6 +5,7 @@ import React from 'react';
 
 const Header: React.FC = () => {
   return (
+    <a href="/" >
     <img
       src="/mizuHeader.png"
       alt="Mizu Header"
@@ -13,7 +14,9 @@ const Header: React.FC = () => {
         filter: "brightness(1.4) saturate(60%) opacity(0.75)",
         zIndex: 5,
       }}
+
     />
+    </a>
   );
 };
 

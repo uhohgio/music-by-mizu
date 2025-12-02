@@ -41,7 +41,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       {isSmallScreen ? (
         // --- Blocker message for tiny devices ---
         <div className="flex items-center justify-center flex-1">
-          <p className="text-center text-[var(--color-content-dark)] p-4">
+          <p className="text-center text-(--color-content-dark) p-4">
             Your screen is too small to use Mizu Media.  
             Please use a device with a larger screen.
           </p>
@@ -52,17 +52,16 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           <Header />
 
           {/* --- Main content area with proper scroll --- */}
-          <div className="relative flex-1 min-h-0 m-[2rem] mt-70 mb-30">
+          <div className="relative flex-1 min-h-0 m-8 mt-70 mb-30">
 
             <main className="overflow-y-auto h-full scroll-smooth custom-scroll pr-2 pb-[120px]">
               {children}
-            </main>
-
+            </main >
             {/* top fade */}
-            <div className="pointer-events-none absolute top-0 left-0 w-full h-12 bg-gradient-to-b from-mizu-bg to-transparent z-10" />
+            <div className="pointer-events-none absolute top-0 left-0 w-full h-12 bg-linear-to-b from-mizu-bg to-transparent z-10" />
 
             {/* bottom fade */}
-            <div className="pointer-events-none absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-mizu-bg to-transparent z-10" />
+            <div className="pointer-events-none absolute bottom-0 left-0 w-full h-12 bg-linear-to-t from-mizu-bg to-transparent z-10" />
           </div>
 
           {/* --- Music Player (sticky on mobile, fixed on desktop) --- */}

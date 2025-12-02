@@ -74,31 +74,31 @@ const AlbumPlaybackView: React.FC<{ albums?: Album[] }> = () => {
 
   // --- Render Logic ---
   if (isLoading) {
-    return <div className="text-sm text-[var(--color-content-dark)] flex justify-center items-center">Loading album...</div>;
+    return <div className="text-sm text-(--color-content-dark) flex justify-center items-center">Loading album...</div>;
   } 
 
   if (error) { 
     console.error("Error Occurred: ", error);
-    return <div className="text-sm text-[var(--color-content-dark)] flex justify-center items-center">Error: No album data could be loaded.</div>; 
+    return <div className="text-sm text-(--color-content-dark) flex justify-center items-center">Error: No album data could be loaded.</div>; 
   }
 
   if (!albumData) {
     // Return message or null if data is unexpectedly missing after loading and no error
     console.error("AlbumPlaybackView Render: No album data found after load!");
-    return <div className="text-sm text-[var(--color-content-dark)] flex justify-center items-center">Album data unavailable.</div>;
+    return <div className="text-sm text-(--color-content-dark) flex justify-center items-center">Album data unavailable.</div>;
   }
 
   return (
     <div className="p-4">
       <div className="mb-6">
-        <Link to="/" className="text-sm text-[var(--color-content-dark)]  hover:underline">
+        <Link to="/" className="text-sm text-(--color-content-dark) hover:underline z-50">
           &larr; Back to Directory
         </Link>
       </div>
 
       {/* Album Header Info */}
       <div className="flex flex-col sm:flex-row items-center gap-4 mb-6 content-section py-4"> {/* Reusing .content-section for bg/shadow */}
-          <div className="flex-shrink-0 w-24 h-24 md:w-32 md:h-32 bg-gray-500 dark:bg-neutral-600 rounded overflow-hidden flex items-center justify-center">
+          <div className="flex shrink-0 w-24 h-24 md:w-32 md:h-32 bg-gray-500 dark:bg-neutral-600 rounded overflow-hidden items-center justify-center">
                {albumData.albumArtSrc ? (
                    <img src={albumData.albumArtSrc} alt={`Cover for ${albumData.title}`} className="w-full h-full object-cover"/>
                 ) : (
