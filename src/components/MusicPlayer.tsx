@@ -210,10 +210,10 @@ const MusicPlayer: React.FC = () => {
   }
 
   return (
-  <div className="p-4 bg-gray-100 dark:bg-gray-800 shadow-md flex items-center gap-4 w-full flex-wrap">
+  <div className="p-4 bg-gray-100 dark:bg-gray-800 shadow-md flex items-center gap-4 w-full flex-wrap @container">
 
     {/* Album Art */}
-    <div className="w-16 h-16 bg-gray-300 dark:bg-gray-600 rounded overflow-hidden flex items-center justify-center">
+    <div className="w-24 h-24 bg-gray-300 dark:bg-gray-600 rounded overflow-hidden flex items-center justify-center">
       {albumArtSrc ? (
         <img src={albumArtSrc} alt="Album art" className="w-full h-full object-cover" />
       ) : (
@@ -231,7 +231,7 @@ const MusicPlayer: React.FC = () => {
       {/* ============================
           SMALL SCREEN CONTROLS (≤640px)
          ============================ */}
-      <div className="flex sm:hidden items-center gap-3 justify-center">
+      <div className="flex @[640px]:hidden items-center gap-3 justify-left">
 
         <button onClick={playPrevious} disabled={!hasPrev} className="p-2 bg-mizu-light dark:bg-mizu-dark  text-gray-700 dark:text-white rounded-full">
           <FaStepBackward />
@@ -273,12 +273,52 @@ const MusicPlayer: React.FC = () => {
             className="w-20"
           />
         </div>
+
+        </div>
+        <div className="flex @[640px]:hidden items-center gap-3 justify-center">
+
+         {/* Repeat */}
+        <button
+          onClick={toggleRepeat}
+          className={`p-2 text-lg ${
+            repeatMode !== 'none'
+              ? 'text-mizu-dark dark:text-mizu-light'
+              : 'text-gray-500 dark:text-gray-400'
+          }`}
+        >
+          {repeatMode === "one" ? <TbRepeatOnce /> : <FaRedo />}
+        </button>
+
+        {/* Shuffle */}
+        <button
+          onClick={toggleShuffle}
+          className={`p-2 text-lg ${
+            isShuffled
+              ? 'text-mizu-dark dark:text-mizu-light'
+              : 'text-gray-500 dark:text-gray-400'
+          }`}
+        >
+          <FaRandom />
+        </button>
+
+        {/* Seek Bar */}
+        <div className="flex items-center gap-2 flex-grow">
+          <span className="font-mono w-12 text-sm">{formatTime(currentTime)}</span>
+          <input
+            type="range"
+            max={duration || 1}
+            value={currentTime}
+            onChange={handleSeek}
+            className="flex-grow"
+          />
+          <span className="font-mono w-12 text-sm">{formatTime(duration)}</span>
+        </div>
       </div>
 
       {/* =============================
           LARGE SCREEN CONTROLS (≥640px)
          ============================= */}
-      <div className="hidden sm:flex flex-col sm:flex-row items-center gap-3">
+      <div className="hidden @[640px]:flex flex-col @[640px]:flex-row items-center gap-3">
 
         {/* Repeat */}
         <button
