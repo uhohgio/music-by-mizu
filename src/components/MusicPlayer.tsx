@@ -210,7 +210,7 @@ const MusicPlayer: React.FC = () => {
   }
 
   return (
-  <div className="p-4 bg-gray-100 dark:bg-gray-800 shadow-md flex items-center gap-4 w-full flex-wrap @container">
+  <div className="p-4 bg-gray-100 dark:bg-gray-800 shadow-md flex flex-row items-center gap-4 w-full @container">
 
     {/* Album Art */}
     <div className="w-24 h-24 bg-gray-300 dark:bg-gray-600 rounded overflow-hidden flex items-center justify-center">
@@ -275,12 +275,12 @@ const MusicPlayer: React.FC = () => {
         </div>
 
         </div>
-        <div className="flex @[640px]:hidden items-center gap-3 justify-center">
+        <div className="flex @[640px]:hidden items-center gap-1 justify-center ml-4 mr-4">
 
          {/* Repeat */}
         <button
           onClick={toggleRepeat}
-          className={`p-2 text-lg ${
+          className={`p-1 text-lg ${
             repeatMode !== 'none'
               ? 'text-mizu-dark dark:text-mizu-light'
               : 'text-gray-500 dark:text-gray-400'
@@ -292,7 +292,7 @@ const MusicPlayer: React.FC = () => {
         {/* Shuffle */}
         <button
           onClick={toggleShuffle}
-          className={`p-2 text-lg ${
+          className={`p-1 text-lg ${
             isShuffled
               ? 'text-mizu-dark dark:text-mizu-light'
               : 'text-gray-500 dark:text-gray-400'
